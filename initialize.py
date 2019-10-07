@@ -1,4 +1,4 @@
-import sys,os, json
+import sys,os,json,time
 from py2neo import Graph, Node, Relationship, Database
 from py2neo.matching import NodeMatcher
 from py2neo.database import Schema
@@ -21,13 +21,14 @@ filename = "datasets/{}/{}.graph.{}".format(category[0], category[0], variant[0]
 with open(parent_dir+filename) as fp:
     elements = fp.readline().strip().split(" ")
 
-G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
-import time 
-start = time.time()
-G.NodeInit(int(elements[0]))
-print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
-
-start = time.time()
 filename = "datasets/{}/{}.graph.{}".format(category[0], category[0], variant[0])
-G.Relation(path=filename)
-print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
+G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
+#start = time.time()
+#G.NodeInit(int(elements[0]))
+#print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
+
+#start = time.time()
+#G.Relation(path=filename)
+#print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
+
+Adj_list_amazon_small = G.gen_adj_list(itr_limit=1000, path=filename)

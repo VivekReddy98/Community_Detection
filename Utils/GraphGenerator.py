@@ -1,3 +1,4 @@
+import json
 from py2neo import Graph, Node, Relationship, Database
 from py2neo.matching import NodeMatcher
 from py2neo.database import Schema
@@ -13,7 +14,7 @@ class GraphGenerator(Parse, ID_generator):
         self.graph = graph
         self.schema = Schema(self.graph)
         
-    def NodeInit(self, node_count, Index_gen=False):
+    def NodeInit(self, node_count, Index_gen=True):
         if Index_gen:  
              self.schema.create_index(self.label_gen(), 'uid')
         tx = self.graph.begin()
@@ -24,7 +25,7 @@ class GraphGenerator(Parse, ID_generator):
     
     
     def Relation(self, path, itr_limit=1000):
-        gen = self.__giveout(path, itr_limit)
+        gen = self.__giveout(path, itr_limit, overrite=True)
         dict_nodes = next(gen)
         while True:
             for key, vals in dict_nodes.items():
@@ -35,7 +36,14 @@ class GraphGenerator(Parse, ID_generator):
                 break
         return None
     
-    def __giveout(self, path, itr_limit, overrite=True):
+    def gen_adj_list(self, itr_limit, path):
+        gen = self.__giveout(path, itr_limit, overrite=True)
+        dict_nodes = next(gen)
+        with open('Adj_list' + '_' + self.label_gen() + '.json', 'w') as fp:
+             json.dump(dict_nodes, fp)
+        return dict_nodes
+        
+    def __giveout(self, path, itr_limit, overrite=False):
         with open(path) as fp:
             elements = fp.readline().strip().split(" ")
             dict_nodes = dict()
