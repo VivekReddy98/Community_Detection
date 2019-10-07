@@ -1,7 +1,0 @@
-{
-    "PageRank": {
-        "query" : "CALL algo.pageRank.stream('MATCH (n:{label}) RETURN id(n) as id','MATCH (p1:{label})-[:KNOWS]->(p2:{label}) RETURN id(p1) as source, id(p2) as target',{graph:'cypher', iterations:20}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
-        "vars" : "labels",
-        "labels" : "{label}" 
-    }
-}
