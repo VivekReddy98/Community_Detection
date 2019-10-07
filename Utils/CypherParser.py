@@ -16,6 +16,12 @@ class Parse(object):
         for key, value in kwargs.items():
             line = re.sub(self.regex[key],value,line)
         return line
+    
+    def match(self, what='list_match', **kwargs):
+        line = self.json_map['match'][what]
+        for key, value in kwargs.items():
+            line = re.sub(self.regex[key],value,line)
+        return line
 
 
 class ID_generator(object):
@@ -33,7 +39,7 @@ class ID_generator(object):
     def uniq_id(self, i):
         index = str(i)
         index = ''.join(["0" for i in range(0,6-len(index))]) + index
-        return self.di[self.cat]+self.di[self.var]+index
+        return '_'+self.di[self.cat]+self.di[self.var]+index
     
     def gen_cluster_id(self, i, prev=None):
         if prev==None:

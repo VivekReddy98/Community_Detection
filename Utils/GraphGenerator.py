@@ -1,0 +1,65 @@
+from py2neo import Graph, Node, Relationship, Database
+from py2neo.matching import NodeMatcher
+from py2neo.database import Schema
+from Utils.CypherParser import Parse, ID_generator
+
+class GraphGenerator(Parse, ID_generator):
+    def __init__(self, graph, cat, var, di, json_dict, regex_dict):
+        self.cat = cat
+        self.var = var
+        self.di = di
+        self.json_map = json_dict
+        self.regex = regex_dict
+        self.graph = graph
+        self.schema = Schema(self.graph)
+        
+    def NodeInit(self, node_count, Index_gen=False):
+        if Index_gen:  
+             self.schema.create_index(self.label_gen(), 'uid')
+        tx = self.graph.begin()
+        for i in range(0,node_count):
+            tx.create(Node(self.label_gen(),name=self.name_gen(i),uid=self.uniq_id(i),cluster=self.gen_cluster_id(0))) 
+        tx.commit()
+        return self.graph
+    
+    
+    def Relation(self, path, itr_limit=1000):
+        gen = self.__giveout(path, itr_limit)
+        dict_nodes = next(gen)
+        while True:
+            for key, vals in dict_nodes.items():
+                self.graph.run(self.create(what='relation', label=self.label_gen(), uid=self.uniq_id(key), sets=str(vals)))
+            dict_nodes = next(gen)
+            if dict_nodes == None:
+                print("The Job is Complete")
+                break
+        return None
+    
+    def __giveout(self, path, itr_limit, overrite=True):
+        with open(path) as fp:
+            elements = fp.readline().strip().split(" ")
+            dict_nodes = dict()
+            if overrite:
+                itr_limit=int(elements[1])
+            for j in range(1, int(elements[1])+1):
+                nodes = list(map(int, fp.readline().strip().split(" ")))
+                if nodes[0] in dict_nodes:
+                    dict_nodes[nodes[0]].append(self.uniq_id(nodes[1]))
+                else:
+                    dict_nodes[nodes[0]] = [self.uniq_id(nodes[1])]
+                if nodes[1] in dict_nodes:
+                    dict_nodes[nodes[1]].append(self.uniq_id(nodes[0]))
+                else:
+                    dict_nodes[nodes[1]] = [self.uniq_id(nodes[0])]
+                    
+                if j%itr_limit==0:
+                    print(j)
+                    yield dict_nodes
+                    dict_nodes = dict()
+                    sets = set()       
+            yield dict_nodes
+            yield None, None
+                    
+
+        
+        

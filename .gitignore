@@ -1,14 +1,12 @@
 #Ignore datasets
-datasets
+datasets/
 
 #Ignore Virtual environment folder
-venv
+venv/
 
-#Ignore requirememts file
-requirements.sh
 
 #Ignore Test Metrics folder
-Metric_test
+Metric_test/
 
 #Ignore metric.py
 metrics.py

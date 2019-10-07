@@ -1,1 +1,1 @@
-{"label": "<label>", "uid": "<uid>", "name": "<name>", "src": "<src>", "dst": "<dst>", "cluster": "<cluster>", "relation": "<rltn>", "index": "<index>", "PR_itr": "<itr>", "PR_df": "<df>"}
+{"label": "<label>", "uid": "<uid>", "uid1": "<uid1>", "uid2": "<uid2>", "name": "<name>", "src": "<src>", "dst": "<dst>", "cluster": "<cluster>", "relation": "<rltn>", "index": "<index>", "PR_itr": "<itr>", "PR_df": "<df>", "sets":"<set>"}

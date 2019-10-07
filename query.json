@@ -1,0 +1,14 @@
+{
+   "create": {"node": "CREATE (<uid>:<label> {name:'<name>', cluster:'<cluster>'});",
+             "relation": "MATCH (n:<label>),(m:<label>) WHERE n.uid='<uid>' AND m.uid in <set> CREATE (n)-[:KNOWS]->(m);",
+             "index": "CREATE INDEX ON :<label>(<index>);"},
+   "PageRank": {
+        "query" : "CALL algo.pageRank.stream('<label>', '<rltn>', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
+        "query_write" : "CALL algo.pageRank('<label>', '<rltn>', {iterations:<itr>, dampingFactor:<df>, write: true, writeProperty:'pagerank'});"
+    },
+    "match": {"node": "MATCH (n:<label>) WHERE n.uid='<uid1>' RETURN n;",
+             "node2": "MATCH (n:<label>) WHERE n.uid='<uid1>' or n.uid='<uid2>' RETURN n;", 
+              "list_match": "UNWIND <set> AS x MATCH (n:<label>) WHERE n.uid=x RETURN n;"
+             }            
+        
+}
