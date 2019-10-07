@@ -23,9 +23,9 @@ with open(parent_dir+filename) as fp:
 
 G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
 import time 
-#start = time.time()
-#G.NodeInit(int(elements[0]))
-#print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
+start = time.time()
+G.NodeInit(int(elements[0]))
+print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
 
 start = time.time()
 filename = "datasets/{}/{}.graph.{}".format(category[0], category[0], variant[0])
