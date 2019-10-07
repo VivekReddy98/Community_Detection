@@ -4,9 +4,14 @@ datasets/
 #Ignore Virtual environment folder
 venv/
 
-
 #Ignore Test Metrics folder
 Metric_test/
 
 #Ignore metric.py
 metrics.py
+
+#Ignore .pyc files
+*.pyc
+
+#Ignore pycache directory
+__pycache__/
