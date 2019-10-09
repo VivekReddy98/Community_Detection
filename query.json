@@ -1,14 +1,30 @@
 {
-   "create": {"node": "CREATE (<uid>:<label> {name:'<name>', cluster:'<cluster>'});",
-             "relation": "MATCH (n:<label>),(m:<label>) WHERE n.uid='<uid>' AND m.uid in <set> CREATE (n)-[:KNOWS]->(m);",
-             "index": "CREATE INDEX ON :<label>(<index>);"},
-   "PageRank": {
-        "query" : "CALL algo.pageRank.stream('<label>', '<rltn>', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
-        "query_write" : "CALL algo.pageRank('<label>', '<rltn>', {iterations:<itr>, dampingFactor:<df>, write: true, writeProperty:'pagerank'});"
-    },
-    "match": {"node": "MATCH (n:<label>) WHERE n.uid='<uid1>' RETURN n;",
-             "node2": "MATCH (n:<label>) WHERE n.uid='<uid1>' or n.uid='<uid2>' RETURN n;", 
-              "list_match": "UNWIND <set> AS x MATCH (n:<label>) WHERE n.uid=x RETURN n;"
-             }            
-        
+	"create": {
+		"node": "CREATE (<uid>:<label> {name:'<name>', cluster:'<cluster>'});",
+		"relation": "MATCH (n:<label>),(m:<label>) WHERE n.uid='<uid>' AND m.uid in <set> CREATE (n)-[:KNOWS]->(m);",
+		"index": "CREATE INDEX ON :<label>(<index>);"
+	},
+	"remove": {
+		"node": "MATCH (a:<label> {uid: '<uid>'}) DELETE a;",
+		"property_all": "MATCH (a:<label>) REMOVE a.<prop> ;",
+        "property_node": "MATCH (a:<label> {uid: '<uid>'}) REMOVE a.<prop>;",
+		"label_all": "MATCH (a:<label>) REMOVE a:<label> ;",
+        "label_node": "MATCH (a:<label> {uid: '<uid>'}) REMOVE a:<label> ;"
+	},
+    "unique": {
+		"property": "MATCH (n:<label>) WHERE EXISTS(n.<prop>) RETURN DISTINCT n.<prop> AS <prop>, count(n) as numNodes ORDER BY numNodes DESC;"
+	},
+	"PageRank": {
+		"query": "CALL algo.pageRank.stream('<label>', '<rltn>', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
+		"query_write": "CALL algo.pageRank('<label>', '<rltn>', {iterations:<itr>, dampingFactor:<df>, write: true, writeProperty:'pagerank'});"
+	},
+	"match": {
+		"node": "MATCH (n:<label>) WHERE n.uid='<uid1>' RETURN n;",
+		"node2": "MATCH (n:<label>) WHERE n.uid='<uid1>' or n.uid='<uid2>' RETURN n;",
+		"list_match": "UNWIND <set> AS x MATCH (n:<label>) WHERE n.uid=x RETURN n;"
+	},
+	"CC": {
+		"query_write": "CALL algo.unionFind('<label>', '<rltn>', {write:true, partitionProperty:'partition'})",
+		"query": "CALL algo.unionFind.stream('<label>', '<rltn>', {}) YIELD nodeId,setId RETURN algo.asNode(nodeId).uid AS Node, setId"
+	}
 }

@@ -10,6 +10,12 @@ class Parse(object):
         for key, value in kwargs.items():
             line = re.sub(self.regex[key],value,line)
         return line
+    
+    def remove(self, what, **kwargs):
+        line = self.json_map['remove'][what]
+        for key, value in kwargs.items():
+            line = re.sub(self.regex[key],value,line)
+        return line
  
     def page_rank(self, what='query_write', **kwargs):
         line = self.json_map['PageRank'][what]
@@ -22,7 +28,18 @@ class Parse(object):
         for key, value in kwargs.items():
             line = re.sub(self.regex[key],value,line)
         return line
-
+    
+    def CC(self, what='query_write', **kwargs):
+        line = self.json_map['CC'][what]
+        for key, value in kwargs.items():
+            line = re.sub(self.regex[key],value,line)
+        return line
+    
+    def match_unique(self, what='property', **kwargs):
+        line = self.json_map['unique'][what]
+        for key, value in kwargs.items():
+            line = re.sub(self.regex[key],value,line)
+        return line
 
 class ID_generator(object):
     def __init__(self, category, variant, dict_identify):
