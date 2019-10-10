@@ -29,14 +29,20 @@ class Parse(object):
             line = re.sub(self.regex[key],value,line)
         return line
     
-    def CC(self, what='query_write', **kwargs):
-        line = self.json_map['CC'][what]
+    def match_unique(self, what='property',**kwargs):
+        line = self.json_map['unique'][what]
         for key, value in kwargs.items():
             line = re.sub(self.regex[key],value,line)
         return line
     
-    def match_unique(self, what='property', **kwargs):
-        line = self.json_map['unique'][what]
+    def cluster(self, what='ask',**kwargs):
+        line = self.json_map['cluster'][what]
+        for key, value in kwargs.items():
+            line = re.sub(self.regex[key],value,line)
+        return line
+    
+    def conductance(self, what, **kwargs):
+        line = self.json_map['conductance'][what]
         for key, value in kwargs.items():
             line = re.sub(self.regex[key],value,line)
         return line

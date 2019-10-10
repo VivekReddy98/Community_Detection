@@ -16,10 +16,10 @@ class GraphGenerator(Parse, ID_generator):
         
     def NodeInit(self, node_count, Index_gen=True):
         if Index_gen:  
-             self.schema.create_index(self.label_gen(), 'uid')
+             self.schema.create_index(self.label_gen(), 'uid','cid')
         tx = self.graph.begin()
         for i in range(0,node_count):
-            tx.create(Node(self.label_gen(),name=self.name_gen(i),uid=self.uniq_id(i),cluster=self.gen_cluster_id(0))) 
+            tx.create(Node(self.label_gen(),name=self.name_gen(i),uid=self.uniq_id(i),cid='|0|')) 
         tx.commit()
         return self.graph
     
@@ -66,7 +66,7 @@ class GraphGenerator(Parse, ID_generator):
                     dict_nodes = dict()
                     sets = set()       
             yield dict_nodes
-            yield None, None
+            yield None
                     
 
         

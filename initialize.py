@@ -25,14 +25,14 @@ with open(parent_dir+filename) as fp:
 filename = "datasets/{}/{}.graph.{}".format(category[0], category[0], variant[0])
 G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
 #Initialize_Nodes
-#start = time.time()
-#G.NodeInit(int(elements[0]))
-#print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
+start = time.time()
+G.NodeInit(int(elements[0]))
+print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
 
 #Initialize Edges
-#start = time.time()
-#G.Relation(path=filename)
-#print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
+start = time.time()
+G.Relation(path=filename)
+print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
 
 #Create and store the corresponding asjacency list
 Adj_list_amazon_small = G.gen_adj_list(itr_limit=1000, path=filename)

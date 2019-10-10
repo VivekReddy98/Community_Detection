@@ -7,12 +7,15 @@
 	"remove": {
 		"node": "MATCH (a:<label> {uid: '<uid>'}) DELETE a;",
 		"property_all": "MATCH (a:<label>) REMOVE a.<prop> ;",
-        "property_node": "MATCH (a:<label> {uid: '<uid>'}) REMOVE a.<prop>;",
+		"property_node": "MATCH (a:<label> {uid: '<uid>'}) REMOVE a.<prop>;",
 		"label_all": "MATCH (a:<label>) REMOVE a:<label> ;",
-        "label_node": "MATCH (a:<label> {uid: '<uid>'}) REMOVE a:<label> ;"
+		"label_node": "MATCH (a:<label> {uid: '<uid>'}) REMOVE a:<label> ;"
 	},
-    "unique": {
-		"property": "MATCH (n:<label>) WHERE EXISTS(n.<prop>) RETURN DISTINCT n.<prop> AS <prop>, count(n) as numNodes ORDER BY numNodes DESC;"
+	"unique": {
+		"property": "MATCH (n:<label>) WHERE EXISTS(n.<prop>) RETURN DISTINCT n.<prop> AS <prop>, count(n) as numNodes ORDER BY numNodes DESC;",
+		"property_PR": "MATCH (n:<label>) WHERE EXISTS(n.pagerank) RETURN n.uid AS uid, n.pagerank AS pagerank ORDER BY pagerank DESC;",
+		"property_PR_local": "MATCH (n:<label>) WHERE n.partition=<part> RETURN n.uid AS uid, n.<prop> AS <prop> ORDER BY <prop> DESC LIMIT <lim>;",
+        "Partition": "MATCH (n:<label>) WHERE n.uid='<uid>' RETURN n.partition AS partition;"
 	},
 	"PageRank": {
 		"query": "CALL algo.pageRank.stream('<label>', '<rltn>', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
@@ -26,5 +29,14 @@
 	"CC": {
 		"query_write": "CALL algo.unionFind('<label>', '<rltn>', {write:true, partitionProperty:'partition'})",
 		"query": "CALL algo.unionFind.stream('<label>', '<rltn>', {}) YIELD nodeId,setId RETURN algo.asNode(nodeId).uid AS Node, setId"
+	},
+	"cluster": {
+		"ask": "MATCH (n:<label>) WHERE n.uid='<uid>' RETURN n.C_D;",
+		"set": "MATCH (n:<label>) WHERE n.uid='<uid>' SET n.C_D = '<cid>';",
+		"nodes": "MATCH (n:<label>) WHERE n.C_D CONTAINS '<cid>' RETURN n.uid AS uid;"
+	},
+	"conductance": {
+		"M_s": "MATCH (n:<label>)-[:KNOWS]->(p:<label>) WHERE n.C_D CONTAINS '<cid>' AND p.C_D CONTAINS '<cid>' RETURN count(*);",
+		"C_s": "MATCH (n:<label>)-[:KNOWS]->(p:<label>) WHERE n.C_D CONTAINS '<cid>' XOR p.C_D CONTAINS '<cid>' RETURN count(*);"
 	}
 }
