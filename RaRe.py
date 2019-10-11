@@ -33,13 +33,13 @@ class RaRe(Parse, ID_generator):
         Prev_CS = self.clusters[cid]['C_s']
         Prev_MS = self.clusters[cid]['M_s']
         old_conductance = Prev_CS/(2*Prev_MS+ Prev_CS) 
-        edges_inside = self.graph.run(self.match(what='edg_inside',label=self.label_gen(),cid=cid)).evaluate()/4
-        edges_outside = self.graph.run(self.match(what='edg_outside',label=self.label_gen(),cid=cid)).evaluate()/4
+        edges_inside = self.graph.run(self.match(what='edge_inside',label=self.label_gen(),cid=cid,uid=node)).evaluate()/4.0
+        edges_outside = self.graph.run(self.match(what='edge_outside',label=self.label_gen(),cid=cid,uid=node)).evaluate()/4.0
         print(node, cid, edges_inside, edges_outside)
         new_CS = Prev_CS-edges_inside+edges_outside 
         new_MS = Prev_MS+edges_inside   
         new_conductance = new_CS/(2*new_MS+ new_CS) 
-        if new_conductance < old_conductnace:
+        if new_conductance < old_conductance:
             return True
         else:
             return False
@@ -51,23 +51,25 @@ class RaRe(Parse, ID_generator):
         self.PageRank()
         self.ConnectedComponents()
         for node in self.PR_list:
+            #print(self.clusters)
             start = time.time()
             added = False
             CD_chance = self.graph.run(self.match(label=self.label_gen(), what="neighbours", uid=node)).to_ndarray().flatten().tolist()
-            print(CD_chance)
+            #print(CD_chance)
             for cluster in CD_chance:
                 if cluster=="0":
                     continue
                 added = self.Conductance(cluster, node)
+                break
                 if  added:
                     self.graph.run(self.cluster(what='set',label=self.label_gen(), uid=node, cid=cluster))
             if not(added):
                 cluster_id = next(self.cid)
                 print(cluster_id)
-                self.clusters[cluster_id] = {}
-                self.clusters[cluster_id]['C_s'] = self.graph.run(self.match(what="C_s",label=self.label_gen(), uid=node)).evaluate()/4.0
-                self.clusters[cluster_id]['M_s'] = 0
-                self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=str(cluster)))
+                self.clusters[str(cluster_id)] = {}
+                self.clusters[str(cluster_id)]['C_s'] = self.graph.run(self.match(what="C_s",label=self.label_gen(), uid=node)).evaluate()/4.0
+                self.clusters[str(cluster_id)]['M_s'] = 0
+                self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=str(cluster_id)))
             #print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), str(cluster_id)))
         return None
                
