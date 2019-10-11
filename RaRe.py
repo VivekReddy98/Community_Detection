@@ -35,7 +35,7 @@ class RaRe(Parse, ID_generator):
         old_conductance = Prev_CS/(2*Prev_MS+ Prev_CS) 
         edges_inside = self.graph.run(self.match(what='edge_inside',label=self.label_gen(),cid=cid,uid=node)).evaluate()/4.0
         edges_outside = self.graph.run(self.match(what='edge_outside',label=self.label_gen(),cid=cid,uid=node)).evaluate()/4.0
-        print(node, cid, edges_inside, edges_outside)
+        #print(node, cid, edges_inside, edges_outside)
         new_CS = Prev_CS-edges_inside+edges_outside 
         new_MS = Prev_MS+edges_inside   
         new_conductance = new_CS/(2*new_MS+ new_CS) 
@@ -44,33 +44,41 @@ class RaRe(Parse, ID_generator):
         else:
             return False
     
+    def PossibleClusters(self, node):
+        CD =  self.graph.run(self.match(label=self.label_gen(), what="neighbours", uid=node)).to_ndarray().flatten().tolist()
+        #print("CD {}".format(CD))
+        CID_set = set()
+        for i in CD:
+            CID_set.update(i.split("|")[1:-1])
+        return CID_set
+    
     def Execute(self):
         self.graph.run("MATCH (n:amazon_small) REMOVE n.C_D;")
-        self.graph.run("MATCH (n:amazon_small) SET n.C_D = '0';")
+        self.graph.run("MATCH (n:amazon_small) SET n.C_D = '|0|';")
         self.graph.run("MATCH (n:amazon_small) REMOVE n.partition;")
         self.PageRank()
         self.ConnectedComponents()
         for node in self.PR_list:
-            #print(self.clusters)
             start = time.time()
             added = False
-            CD_chance = self.graph.run(self.match(label=self.label_gen(), what="neighbours", uid=node)).to_ndarray().flatten().tolist()
-            #print(CD_chance)
-            for cluster in CD_chance:
-                if cluster=="0":
+            CID_set = self.PossibleClusters(node)
+            prev = None
+            for cluster_id in CID_set:
+                if cluster_id=="0":
                     continue
-                added = self.Conductance(cluster, node)
-                break
+                added = self.Conductance(cluster_id, node)
                 if  added:
-                    self.graph.run(self.cluster(what='set',label=self.label_gen(), uid=node, cid=cluster))
+                    prev = self.gen_cluster_id(cluster_id, prev=prev)
+                    #print(prev)
+                    self.graph.run(self.cluster(what='set',label=self.label_gen(), uid=node, cid=prev))
             if not(added):
                 cluster_id = next(self.cid)
-                print(cluster_id)
                 self.clusters[str(cluster_id)] = {}
                 self.clusters[str(cluster_id)]['C_s'] = self.graph.run(self.match(what="C_s",label=self.label_gen(), uid=node)).evaluate()/4.0
                 self.clusters[str(cluster_id)]['M_s'] = 0
-                self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=str(cluster_id)))
-            #print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), str(cluster_id)))
+                prev = self.gen_cluster_id(cluster_id, prev=None)
+                self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=prev))
+            print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
         return None
                
     
