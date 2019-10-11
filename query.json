@@ -14,8 +14,7 @@
 	"unique": {
 		"property": "MATCH (n:<label>) WHERE EXISTS(n.<prop>) RETURN DISTINCT n.<prop> AS <prop>, count(n) as numNodes ORDER BY numNodes DESC;",
 		"property_PR": "MATCH (n:<label>) WHERE EXISTS(n.pagerank) RETURN n.uid AS uid, n.pagerank AS pagerank ORDER BY pagerank DESC;",
-		"property_PR_local": "MATCH (n:<label>) WHERE n.partition=<part> RETURN n.uid AS uid, n.<prop> AS <prop> ORDER BY <prop> DESC LIMIT <lim>;",
-        "Partition": "MATCH (n:<label>) WHERE n.uid='<uid>' RETURN n.partition AS partition;"
+		"property_PR_local": "MATCH (n:<label>) WHERE n.partition=<part> RETURN n.uid AS uid, n.<prop> AS <prop> ORDER BY <prop> DESC LIMIT <lim>;"
 	},
 	"PageRank": {
 		"query": "CALL algo.pageRank.stream('<label>', '<rltn>', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
@@ -24,11 +23,16 @@
 	"match": {
 		"node": "MATCH (n:<label>) WHERE n.uid='<uid1>' RETURN n;",
 		"node2": "MATCH (n:<label>) WHERE n.uid='<uid1>' or n.uid='<uid2>' RETURN n;",
-		"list_match": "UNWIND <set> AS x MATCH (n:<label>) WHERE n.uid=x RETURN n;"
+		"list_match": "UNWIND <set> AS x MATCH (n:<label>) WHERE n.uid=x RETURN n;",
+		"neighbours": "MATCH (n:<label>{uid:'<uid>'}),(m:<label>) WHERE n.partition=m.partition RETURN DISTINCT m.C_D;",
+		"partition": "MATCH (n:<label>{uid:'<uid>'}), (c) WHERE RETURN DISTINCT c.C_D;",
+		"C_s": "MATCH (n:<label>{uid:'<uid>'})-[*1]->(c) RETURN count(c);",
+		"edg_inside": "MATCH (n:<label>{uid:'<uid>'})-[*1]->(c) WHERE c.C_D='<cid>' RETURN count(c);",
+		"edg_outside": "MATCH (n:<label>{uid:'<uid>'})-[*1]->(c) WHERE NOT c.C_D='<cid>' RETURN count(c);"
 	},
 	"CC": {
-		"query_write": "CALL algo.unionFind('<label>', '<rltn>', {write:true, partitionProperty:'partition'})",
-		"query": "CALL algo.unionFind.stream('<label>', '<rltn>', {}) YIELD nodeId,setId RETURN algo.asNode(nodeId).uid AS Node, setId"
+		"query_write": "CALL algo.unionFind('<label>', 'KNOWS', {write:true, partitionProperty:'partition'})",
+		"query": "CALL algo.unionFind.stream('<label>', 'KNOWS', {}) YIELD nodeId,setId RETURN algo.asNode(nodeId).uid AS Node, setId"
 	},
 	"cluster": {
 		"ask": "MATCH (n:<label>) WHERE n.uid='<uid>' RETURN n.C_D;",

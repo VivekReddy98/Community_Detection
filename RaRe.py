@@ -17,7 +17,6 @@ class RaRe(Parse, ID_generator):
         self.schema = Schema(self.graph)
         self.PR_list = []
         self.clusters = {}
-        self.cp_map = dict()
         self.cid = count(start=1, step=1)
 
     def PageRank(self, PR_itr='25000', PR_df='0.85', what='query_write'):
@@ -26,44 +25,50 @@ class RaRe(Parse, ID_generator):
         self.PR_list = df_PR['uid'].tolist()
         return None
     
-    def CC(self, what='query_write'):
-        self.graph.run(self.CC(what=what, label=self.label_gen(), relation='KNOWS'))
+    def ConnectedComponents(self, what='query_write'):
+        self.graph.run(self.CC(what=what, label=self.label_gen()))
         return None
         
-    def Conductance(self, cid):
-        C_s = self.graph.run(self.conductance(what='C_s', cid=cid, label=self.label_gen())).evaluate()/2.0
-        M_s = self.graph.run(self.conductance(what='M_s', cid=cid, label=self.label_gen())).evaluate()
-        conductance_score = C_s/(M_s+C_s)
-        return conductance_score
+    def Conductance(self, cid, node):
+        Prev_CS = self.clusters[cid]['C_s']
+        Prev_MS = self.clusters[cid]['M_s']
+        old_conductance = Prev_CS/(2*Prev_MS+ Prev_CS) 
+        edges_inside = self.graph.run(self.match(what='edg_inside',label=self.label_gen(),cid=cid)).evaluate()/4
+        edges_outside = self.graph.run(self.match(what='edg_outside',label=self.label_gen(),cid=cid)).evaluate()/4
+        print(node, cid, edges_inside, edges_outside)
+        new_CS = Prev_CS-edges_inside+edges_outside 
+        new_MS = Prev_MS+edges_inside   
+        new_conductance = new_CS/(2*new_MS+ new_CS) 
+        if new_conductance < old_conductnace:
+            return True
+        else:
+            return False
     
     def Execute(self):
-        #self.graph.run("MATCH (n:amazon_small) REMOVE n.C_D")
-        #self.graph.run("MATCH (n:amazon_small) SET n.C_D = '|0|';")
+        self.graph.run("MATCH (n:amazon_small) REMOVE n.C_D;")
+        self.graph.run("MATCH (n:amazon_small) SET n.C_D = '0';")
+        self.graph.run("MATCH (n:amazon_small) REMOVE n.partition;")
         self.PageRank()
+        self.ConnectedComponents()
         for node in self.PR_list:
-            prev_immute = self.graph.run(self.cluster(what='ask', label=self.label_gen(), uid=node)).evaluate()
+            start = time.time()
             added = False
-            for cluster_id, score in self.clusters.items():
-                part = self.graph.run(self.match_unique(what='Partition',label=self.label_gen(),uid=node)).evaluate()
-                if part!=self.cp_map[cluster_id]:
-                    continue                 
-                cluster = self.gen_cluster_id(cluster_id, prev=prev_immute)
-                self.graph.run(self.cluster(what='set',label=self.label_gen(), uid=node, cid=cluster))
-                new_score = self.Conductance("|"+str(cluster_id)+"|")
-                if  new_score < score:
-                    self.clusters[cluster_id] = new_score
-                    added = True
-                else:
-                    self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=prev_immute))
+            CD_chance = self.graph.run(self.match(label=self.label_gen(), what="neighbours", uid=node)).to_ndarray().flatten().tolist()
+            print(CD_chance)
+            for cluster in CD_chance:
+                if cluster=="0":
+                    continue
+                added = self.Conductance(cluster, node)
+                if  added:
+                    self.graph.run(self.cluster(what='set',label=self.label_gen(), uid=node, cid=cluster))
             if not(added):
-                cluster_id = next(self.cid)                
-                self.clusters[cluster_id] = 1 
-                partition = self.graph.run(self.match_unique(what='Partition',label=self.label_gen(),uid=node)).evaluate()
-                self.cp_map[cluster_id] = partition
-                print(node, self.cp_map[cluster_id])
-                cluster = self.gen_cluster_id(cluster_id, prev=prev_immute)
-                self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=cluster))
-            print(node, prev_immute, cluster)
+                cluster_id = next(self.cid)
+                print(cluster_id)
+                self.clusters[cluster_id] = {}
+                self.clusters[cluster_id]['C_s'] = self.graph.run(self.match(what="C_s",label=self.label_gen(), uid=node)).evaluate()/4.0
+                self.clusters[cluster_id]['M_s'] = 0
+                self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=str(cluster)))
+            #print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), str(cluster_id)))
         return None
                
     

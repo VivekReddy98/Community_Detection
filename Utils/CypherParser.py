@@ -41,6 +41,12 @@ class Parse(object):
             line = re.sub(self.regex[key],value,line)
         return line
     
+    def CC(self, what='query_write', **kwargs):
+        line = self.json_map['CC'][what]
+        for key, value in kwargs.items():
+            line = re.sub(self.regex[key],value,line)
+        return line
+    
     def conductance(self, what, **kwargs):
         line = self.json_map['conductance'][what]
         for key, value in kwargs.items():

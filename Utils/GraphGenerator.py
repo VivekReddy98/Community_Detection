@@ -23,13 +23,12 @@ class GraphGenerator(Parse, ID_generator):
         tx.commit()
         return self.graph
     
-    
     def Relation(self, path, itr_limit=1000):
         gen = self.__giveout(path, itr_limit, overrite=True)
         dict_nodes = next(gen)
         while True:
             for key, vals in dict_nodes.items():
-                self.graph.run(self.create(what='relation', label=self.label_gen(), uid=self.uniq_id(key), sets=str(vals)))
+                self.graph.run(self.create(what='relation', label=self.label_gen(), uid=key, sets=str(vals)))
             dict_nodes = next(gen)
             if dict_nodes == None:
                 print("The Job is Complete")
@@ -51,14 +50,15 @@ class GraphGenerator(Parse, ID_generator):
                 itr_limit=int(elements[1])
             for j in range(1, int(elements[1])+1):
                 nodes = list(map(int, fp.readline().strip().split(" ")))
+                nodes = [self.uniq_id(nodes[0]),self.uniq_id(nodes[1])]
                 if nodes[0] in dict_nodes:
-                    dict_nodes[nodes[0]].append(self.uniq_id(nodes[1]))
+                    dict_nodes[nodes[0]].append(nodes[1])
                 else:
-                    dict_nodes[nodes[0]] = [self.uniq_id(nodes[1])]
+                    dict_nodes[nodes[0]] = [nodes[1]]
                 if nodes[1] in dict_nodes:
-                    dict_nodes[nodes[1]].append(self.uniq_id(nodes[0]))
+                    dict_nodes[nodes[1]].append(nodes[0])
                 else:
-                    dict_nodes[nodes[1]] = [self.uniq_id(nodes[0])]
+                    dict_nodes[nodes[1]] = [nodes[0]]
                     
                 if j%itr_limit==0:
                     print(j)
