@@ -40,6 +40,8 @@ class RaRe(Parse, ID_generator):
         new_MS = Prev_MS+edges_inside   
         new_conductance = new_CS/(2*new_MS+ new_CS) 
         if new_conductance < old_conductance:
+            self.clusters[cid]['C_s'] = new_CS
+            self.clusters[cid]['M_s'] = new_MS
             return True
         else:
             return False
@@ -52,6 +54,14 @@ class RaRe(Parse, ID_generator):
             CID_set.update(i.split("|")[1:-1])
         return CID_set
     
+    def getConductanceDict(self, write=True):
+        if write==True:
+            with open("Conductance" + "_" + self.label_gen()+".json", 'w') as fp:
+                json.dump(self.clusters, fp)
+            return None
+        else:
+            return self.clusters
+                   
     def Execute(self):
         self.graph.run("MATCH (n:amazon_small) REMOVE n.C_D;")
         self.graph.run("MATCH (n:amazon_small) SET n.C_D = '|0|';")
@@ -98,6 +108,6 @@ if __name__ == '__main__':
         
     R = RaRe(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
     start = time.time()
-    #R.PageRank(PR_itr='10000', PR_df='0.85')
     R.Execute()
-    print("The time taken for Page Rank is {} mins".format((time.time()-start)/60))
+    print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
+    R.getConductanceDict(write=True)
