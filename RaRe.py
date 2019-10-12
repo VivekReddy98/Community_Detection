@@ -24,28 +24,28 @@ class RaRe(Parse, ID_generator):
         df_PR = self.graph.run(self.match_unique(what='property_PR', label=self.label_gen())).to_data_frame()
         self.PR_list = df_PR['uid'].tolist()
         return None
-    
+
     def ConnectedComponents(self, what='query_write'):
         self.graph.run(self.CC(what=what, label=self.label_gen()))
         return None
-        
+
     def Conductance(self, cid, node):
         Prev_CS = self.clusters[cid]['C_s']
         Prev_MS = self.clusters[cid]['M_s']
-        old_conductance = Prev_CS/(2*Prev_MS+ Prev_CS) 
+        old_conductance = Prev_CS/(2*Prev_MS+ Prev_CS)
         edges_inside = self.graph.run(self.match(what='edge_inside',label=self.label_gen(),cid=cid,uid=node)).evaluate()/4.0
         edges_outside = self.graph.run(self.match(what='edge_outside',label=self.label_gen(),cid=cid,uid=node)).evaluate()/4.0
         #print(node, cid, edges_inside, edges_outside)
-        new_CS = Prev_CS-edges_inside+edges_outside 
-        new_MS = Prev_MS+edges_inside   
-        new_conductance = new_CS/(2*new_MS+ new_CS) 
+        new_CS = Prev_CS-edges_inside+edges_outside
+        new_MS = Prev_MS+edges_inside
+        new_conductance = new_CS/(2*new_MS+ new_CS)
         if new_conductance < old_conductance:
             self.clusters[cid]['C_s'] = new_CS
             self.clusters[cid]['M_s'] = new_MS
             return True
         else:
             return False
-    
+
     def PossibleClusters(self, node):
         CD =  self.graph.run(self.match(label=self.label_gen(), what="neighbours", uid=node)).to_ndarray().flatten().tolist()
         #print("CD {}".format(CD))
@@ -53,7 +53,7 @@ class RaRe(Parse, ID_generator):
         for i in CD:
             CID_set.update(i.split("|")[1:-1])
         return CID_set
-    
+
     def getConductanceDict(self, write=True):
         if write==True:
             with open("Conductance" + "_" + self.label_gen()+".json", 'w') as fp:
@@ -61,7 +61,7 @@ class RaRe(Parse, ID_generator):
             return None
         else:
             return self.clusters
-                   
+
     def Execute(self):
         self.graph.run("MATCH (n:amazon_small) REMOVE n.C_D;")
         self.graph.run("MATCH (n:amazon_small) SET n.C_D = '|0|';")
@@ -90,22 +90,22 @@ class RaRe(Parse, ID_generator):
                 self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=prev))
             print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
         return None
-               
-    
+
+
 if __name__ == '__main__':
-    parent_dir = os.environ['GDMPATH']
-    graph = Graph("bolt:localhost:7474/databases/gdm.db", auth=("neo4j", ""))
+    parent_dir = "/Users/yashwanthsoodini/Documents/WEREWOLF/Graph Data Mining/Community Detection/Community_Detection"
+    graph = Graph("bolt:localhost:7474", auth=("neo4j", "112358"))
 
     category = ['amazon']  #'dblp', 'youtube']
-    variant = ['small',] #['medium', 'large'] 
+    variant = ['small',] #['medium', 'large']
     di = {'amazon':'1', 'dblp':'2', 'youtube':'3', 'small':'4', 'medium':'5', 'large':'6'}
 
     with open('query.json') as json_file:
         json_dict = json.load(json_file)
 
     with open('Regex_dict.json') as json_file:
-        regex_dict = json.load(json_file) 
-        
+        regex_dict = json.load(json_file)
+
     R = RaRe(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
     start = time.time()
     R.Execute()
