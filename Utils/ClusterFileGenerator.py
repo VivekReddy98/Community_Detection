@@ -11,7 +11,7 @@ import sys
 """
 Note: Your neo4j database address, username and password may be different if you ever changed them. Change the arguments to Graph accordingly.
 """
-graph = Graph("bolt:localhost:7474", auth=("neo4j", "neo4j"))
+graph = Graph("bolt:localhost:7474", auth=("neo4j", "vivek1234"))
 
 matcher = NodeMatcher(graph)
 node_name = str(sys.argv[1])

@@ -26,9 +26,9 @@
 		"list_match": "UNWIND <set> AS x MATCH (n:<label>) WHERE n.uid=x RETURN n;",
 		"neighbours": "MATCH (n:<label>{uid:'<uid>'}),(m:<label>) WHERE n.partition=m.partition RETURN DISTINCT m.C_D;",
 		"partition": "MATCH (n:<label>{uid:'<uid>'}), (c) WHERE RETURN DISTINCT c.C_D;",
-		"C_s": "MATCH (n:<label>{uid:'<uid>'})-[*1]->(c:<label>) RETURN count(c);",
-		"edge_inside": "MATCH (n:<label>{uid:'<uid>'})-[*1]->(c:<label>) WHERE c.C_D CONTAINS '|<cid>|' RETURN count(c);",
-		"edge_outside": "MATCH (n:<label>{uid:'<uid>'})-[*1]->(c:<label>) WHERE NOT c.C_D CONTAINS '|<cid>|' RETURN count(c);"
+		"C_s": "MATCH (n:<label>{uid:'<uid>'})-[:KNOWS]->(c:<label>) RETURN count(c);",
+		"edge_inside": "MATCH (n:<label>{uid:'<uid>'})-[:KNOWS]->(c:<label>) WHERE c.C_D CONTAINS '|<cid>|' RETURN count(c);",
+		"edge_outside": "MATCH (n:<label>{uid:'<uid>'})-[:KNOWS]->(c:<label>) WHERE NOT c.C_D CONTAINS '|<cid>|' RETURN count(c);"
 	},
 	"CC": {
 		"query_write": "CALL algo.unionFind('<label>', 'KNOWS', {write:true, partitionProperty:'partition'})",
@@ -37,10 +37,12 @@
 	"cluster": {
 		"ask": "MATCH (n:<label>) WHERE n.uid='<uid>' RETURN n.C_D;",
 		"set": "MATCH (n:<label>) WHERE n.uid='<uid>' SET n.C_D = '<cid>';",
-		"nodes": "MATCH (n:<label>) WHERE n.C_D CONTAINS '|<cid>|' RETURN n.uid AS uid;"
+        "remove": "MATCH (n:<label>{uid:<uid>}) SET n.C_D = '<cid>';",
+		"nodes": "MATCH (n:<label>) WHERE n.C_D CONTAINS '|<cid>|' RETURN DISTINCT n.uid AS uid;",
+        "one_hop_neigh": "MATCH (n:<label>)-[*0..1]->(m:<label>) WHERE EXISTS(m.pagerank) AND n.C_D CONTAINS '|<cid>|' RETURN DISTINCT m.uid AS uid, m.C_D AS C_D;"
 	},
 	"conductance": {
-		"M_s": "MATCH (n:<label>)-[:KNOWS]->(p:<label>) WHERE n.C_D CONTAINS '|<cid>|' AND p.C_D CONTAINS '<cid>' RETURN count(*);",
-		"C_s": "MATCH (n:<label>)-[:KNOWS]->(p:<label>) WHERE n.C_D CONTAINS '|<cid>|' XOR p.C_D CONTAINS '<cid>' RETURN count(*);"
+		"M_s": "MATCH (n:<label>)-[r:KNOWS]->(m:<label>) where n.C_D CONTAINS '|<cid>|' AND m.C_D CONTAINS '|<cid>|' return count(r)",
+		"C_s": "MATCH (n:<label>)-[r:KNOWS]->(m:<label>) where n.C_D CONTAINS '|<cid>|' AND NOT m.C_D CONTAINS '|<cid>|' return count(r)"
 	}
 }
