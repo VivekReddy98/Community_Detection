@@ -8,12 +8,13 @@ from Utils.RaRe import RaRe
 from Utils.IS import IS
 from Utils.ClusterFileGenerator import ClusterFileGenerator
 from Utils.CypherParser import Parse,ID_generator
+import sys
 
 parent_dir = os.environ['GDMPATH']
 graph = Graph("bolt:localhost:7474/databases/gdm.db", auth=("neo4j", "vivek1234"))
 
-category = ['dblp', 'youtube']
-variant = ['small' ] #, 'medium' ] #'large'] 
+category = ['amazon','dblp','youtube']
+variant = ['small', 'medium', 'large' ]  
 di = {'amazon':'1', 'dblp':'2', 'youtube':'3', 'small':'4', 'medium':'5', 'large':'6'}
 
 with open('json_files/query.json') as json_file:
@@ -22,44 +23,48 @@ with open('json_files/query.json') as json_file:
 with open('json_files/Regex_dict.json') as json_file:
     regex_dict = json.load(json_file) 
 
- 
-           
-for cat in category:
-    for var in variant:
-        filename = "datasets/{}/{}.graph.{}".format(cat, cat, var)  
-           
-        with open(parent_dir+filename) as fp:
-            elements = fp.readline().strip().split(" ")
+cat = str(sys.argv[1])
+var = str(sys.argv[2])
+print(var)
+if cat not in category:
+    raise Exception('The argument 1 should be one of these [amazon, dblp or youtube]')
+if var not in variant:
+    raise Exception('The argument 2 should be one of these [small, medium or large]')
 
-        G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
-        print("Initializing Nodes for the graph {}_{}".format(cat,var))
-        start = time.time()
-        G.NodeInit(int(elements[0]))
-        print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
+filename = "datasets/{}/{}.graph.{}".format(cat, cat, var)  
+    
+with open(parent_dir+filename) as fp:
+    elements = fp.readline().strip().split(" ")
 
-        print("Initializing Edges for the graph {}_{}".format(cat,var))
-        start = time.time()
-        G.Relation(path=filename)
-        print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
+G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
+print("Initializing Nodes for the graph {}_{}".format(cat,var))
+start = time.time()
+G.NodeInit(int(elements[0]))
+print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
 
-        R = RaRe(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
-        print("Computing RaRe(or LA) for the graph {}_{}...........".format(cat,var))
-        start = time.time()
-        R.Execute()
-        R.getConductanceDict(write=True)
-        print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
-        num_clusters = len(R.getConductanceDict(write=False))
-        print("The total number of clusters found out by RaRe for the graph {}_{} is {}".format(cat,var,num_clusters))       
-        
-        num_clusters = 444
-        F = ClusterFileGenerator(graph=graph) 
-        F.genFile(cat, var, num_clusters, is_LA_output=True)     
+print("Initializing Edges for the graph {}_{}".format(cat,var))
+start = time.time()
+G.Relation(path=filename)
+print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
 
-        print("Computing IS(or Iterative Scan) for the graph {}_{}".format(cat,var))
-        start = time.time()
-        I = IS(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
-        I.Execute()
-        print("The time taken for IS is {} mins".format((time.time()-start)/60))
+R = RaRe(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
+print("Computing RaRe(or LA) for the graph {}_{}...........".format(cat,var))
+start = time.time()
+R.Execute()
+R.getConductanceDict(write=True)
+print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
+num_clusters = len(R.getConductanceDict(write=False))
+print("The total number of clusters found out by RaRe for the graph {}_{} is {}".format(cat,var,num_clusters))       
 
-        F = ClusterFileGenerator(graph=graph) 
-        F.genFile(cat, var, num_clusters, is_LA_output=False)    
+num_clusters = 444
+F = ClusterFileGenerator(graph=graph) 
+F.genFile(cat, var, num_clusters, is_LA_output=True)     
+
+print("Computing IS(or Iterative Scan) for the graph {}_{}".format(cat,var))
+start = time.time()
+I = IS(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
+I.Execute()
+print("The time taken for IS is {} mins".format((time.time()-start)/60))
+
+F = ClusterFileGenerator(graph=graph) 
+F.genFile(cat, var, num_clusters, is_LA_output=False)    

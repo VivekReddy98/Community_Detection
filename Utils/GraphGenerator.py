@@ -8,6 +8,7 @@ class GraphGenerator(Parse, ID_generator):
     def __init__(self, graph, cat, var, di, json_dict, regex_dict):
         self.cat = cat
         self.var = var
+        print(self.label_gen())
         self.di = di
         self.json_map = json_dict
         self.regex = regex_dict
