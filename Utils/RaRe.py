@@ -21,7 +21,9 @@ class RaRe(Parse, ID_generator):
 
     def PageRank(self, PR_itr='25000', PR_df='0.85', what='query_write'):
         self.graph.run(self.page_rank(what=what, label=self.label_gen(), relation='KNOWS', PR_itr=PR_itr, PR_df=PR_df))
+        print(self.match_unique(what='property_PR', label=self.label_gen()))
         df_PR = self.graph.run(self.match_unique(what='property_PR', label=self.label_gen())).to_data_frame()
+        print(df_PR.head())
         self.PR_list = df_PR['uid'].tolist()
         return None
 
@@ -56,21 +58,21 @@ class RaRe(Parse, ID_generator):
 
     def getConductanceDict(self, write=True):
         if write==True:
-            with open("Conductance" + "_" + self.label_gen()+".json", 'w') as fp:
+            with open("json_files/Conductance" + "_" + self.label_gen()+".json", 'w') as fp:
                 json.dump(self.clusters, fp)
             return None
         else:
             return self.clusters
 
     def Execute(self):
-        self.graph.run("MATCH (n:amazon_small) REMOVE n.C_D;")
-        self.graph.run("MATCH (n:amazon_small) SET n.C_D = '|0|';")
-        self.graph.run("MATCH (n:amazon_small) REMOVE n.pagerank;")
-        self.graph.run("MATCH (n:amazon_small) REMOVE n.partition;")
+        self.graph.run("MATCH (n:{}) REMOVE n.C_D;".format(self.label_gen()))
+        self.graph.run("MATCH (n:{}) SET n.C_D = '|0|';".format(self.label_gen()))
+        self.graph.run("MATCH (n:{}) REMOVE n.pagerank;".format(self.label_gen()))
+        self.graph.run("MATCH (n:{}) REMOVE n.partition;".format(self.label_gen()))
         self.PageRank()
         self.ConnectedComponents()
         for node in self.PR_list:
-            start = time.time()
+            #start = time.time()
             added = False
             CID_set = self.PossibleClusters(node)
             prev = None
@@ -89,7 +91,7 @@ class RaRe(Parse, ID_generator):
                 self.clusters[str(cluster_id)]['M_s'] = 0
                 prev = self.gen_cluster_id(cluster_id, prev=None)
                 self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=prev))
-            print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
+            #print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
         return None
 
 
@@ -97,18 +99,19 @@ if __name__ == '__main__':
     parent_dir = os.environ["GDMPATH"]
     graph = Graph("bolt:localhost:7474", auth=("neo4j", "vivek1234"))
 
-    category = ['amazon']  #'dblp', 'youtube']
+    category = ['dblp']  #'dblp', 'youtube']
     variant = ['small',] #['medium', 'large']
     di = {'amazon':'1', 'dblp':'2', 'youtube':'3', 'small':'4', 'medium':'5', 'large':'6'}
 
-    with open('query.json') as json_file:
+    with open('json_files/query.json') as json_file:
         json_dict = json.load(json_file)
 
-    with open('Regex_dict.json') as json_file:
+    with open('json_files/Regex_dict.json') as json_file:
         regex_dict = json.load(json_file)
 
     R = RaRe(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
     start = time.time()
-    R.Execute()
+    #R.Execute()
+    R.PageRank()
     print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
     R.getConductanceDict(write=True)

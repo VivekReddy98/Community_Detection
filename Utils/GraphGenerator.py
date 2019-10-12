@@ -24,7 +24,7 @@ class GraphGenerator(Parse, ID_generator):
         return self.graph
     
     def Relation(self, path, itr_limit=1000):
-        gen = self.__giveout(path, itr_limit, overrite=True)
+        gen = self.__giveout(path, itr_limit, overrite=False)
         dict_nodes = next(gen)
         while True:
             for key, vals in dict_nodes.items():
@@ -38,7 +38,7 @@ class GraphGenerator(Parse, ID_generator):
     def gen_adj_list(self, itr_limit, path):
         gen = self.__giveout(path, itr_limit, overrite=True)
         dict_nodes = next(gen)
-        with open('Adj_list' + '_' + self.label_gen() + '.json', 'w') as fp:
+        with open('json_files/Adj_list' + '_' + self.label_gen() + '.json', 'w') as fp:
              json.dump(dict_nodes, fp)
         return dict_nodes
         
@@ -61,7 +61,7 @@ class GraphGenerator(Parse, ID_generator):
                     dict_nodes[nodes[1]] = [nodes[0]]
                     
                 if j%itr_limit==0:
-                    print(j)
+                    #print(j)
                     yield dict_nodes
                     dict_nodes = dict()
                     sets = set()       

@@ -75,7 +75,8 @@ class ID_generator(object):
             return '|' + str(i) + '|'
         else:
             return prev+str(i)+'|'
-        
+
+
 #Examples of using Parse()
 #Id = ID_generators('amazon', 'small', di)
 # print(parse.create(what='node', uid=Id.uniq_id(0), label=Id.label_gen(), name=Id.name_gen(0), cluster=Id.gen_cluster_id(0)))
