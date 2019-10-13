@@ -11,7 +11,7 @@ from Utils.CypherParser import Parse,ID_generator
 import sys
 
 parent_dir = os.environ['GDMPATH']
-graph = Graph("bolt:localhost:7474/databases/gdm.db", auth=("neo4j", "vivek1234"))
+graph = Graph("bolt:localhost:7474/", auth=("neo4j", "neo4j"))
 
 categories = ['amazon','dblp','youtube']
 variants = ['small', 'medium', 'large' ]  

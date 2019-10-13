@@ -3,5 +3,5 @@ pip3 install py2neo
 pip3 install numpy
 pip3 install pandas
 pip3 install urllib3
-export GDMPATH=/home/vkarri/Community_Detection/
+export GDMPATH=/xxxxxxxx/Community_Detection/
 export PYTHONPATH=$PYTHONPATH:$GDMPATH
