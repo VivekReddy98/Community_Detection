@@ -28,7 +28,7 @@ class IS(Parse, ID_generator):
                 continue
             self.clusters[key]['C_s'] = self.graph.run(self.conductance(what="C_s",label=self.label_gen(),cid=key)).evaluate()
         if write:
-            with open("Conductance" + "_" + self.label_gen()+".json", 'w') as fp:
+            with open("json_files/Conductance" + "_" + self.label_gen()+".json", 'w') as fp:
                  json.dump(self.clusters, fp)
         print('Finished')
         return None
