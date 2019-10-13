@@ -72,7 +72,7 @@ class RaRe(Parse, ID_generator):
         self.PageRank()
         self.ConnectedComponents()
         for node in self.PR_list:
-            #start = time.time()
+            start = time.time()
             added = False
             CID_set = self.PossibleClusters(node)
             prev = None
@@ -91,7 +91,7 @@ class RaRe(Parse, ID_generator):
                 self.clusters[str(cluster_id)]['M_s'] = 0
                 prev = self.gen_cluster_id(cluster_id, prev=None)
                 self.graph.run(self.cluster(what='set',label=self.label_gen(),uid=node,cid=prev))
-            #print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
+            print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
         return None
 
 # if __name__ == '__main__':

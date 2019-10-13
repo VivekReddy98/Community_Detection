@@ -58,7 +58,6 @@ print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
 num_clusters = len(R.getConductanceDict(write=False))
 print("The total number of clusters found out by RaRe for the graph {}_{} is {}".format(cat,var,num_clusters))       
 
-num_clusters = 444
 F = ClusterFileGenerator(graph=graph) 
 F.genFile(cat, var, num_clusters, is_LA_output=True)     
 

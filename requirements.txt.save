@@ -1,0 +1,6 @@
+neo4j
+py2neo
+numpy
+pandas
+urllib3
+export GDMPATH=/xxxxxxxx/Community_Detection/
