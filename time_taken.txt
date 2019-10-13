@@ -1,0 +1,2 @@
+It took 1086 seconds to complete the metric for the graph dblp medium
+It took 1021 seconds to complete the metric for the graph youtube medium

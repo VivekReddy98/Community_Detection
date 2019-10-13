@@ -24,7 +24,7 @@ class GraphGenerator(Parse, ID_generator):
         tx.commit()
         return self.graph
     
-    def Relation(self, path, itr_limit=1000):
+    def Relation(self, path, itr_limit=2500):
         gen = self.__giveout(path, itr_limit, overrite=False)
         dict_nodes = next(gen)
         while True:

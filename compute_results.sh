@@ -26,8 +26,8 @@ export start=$SECONDS
 python3 initialize.py $cat $var
 
 echo "Using Python2 at /usr/bin/python to run the metrics, usualy it is python2, but if it isn't choose a python 2 interpreter from your system to run this."
-/usr/bin/python metrics_code/metrics.py datasets/$cat/$cat.graph.$var datasets/$cat/$cat.comm.$var predictions/$cat.ISpred.$var results/$cat.IS.$var >> results/$cat.IS.$var.console
-/usr/bin/python metrics_code/metrics.py datasets/$cat/$cat.graph.$var datasets/$cat/$cat.comm.$var predictions/$cat.LApred.$var results/$cat.LA.$var >> results/$cat.LA.$var.console
+/usr/bin/python metrics_code/metrics.py datasets/$cat/$cat.graph.$var datasets/$cat/$cat.comm.$var predictions/$cat.ISpred.$var results/$cat.IS.$var > results/$cat.IS.$var.console
+/usr/bin/python metrics_code/metrics.py datasets/$cat/$cat.graph.$var datasets/$cat/$cat.comm.$var predictions/$cat.LApred.$var results/$cat.LA.$var > results/$cat.LA.$var.console
 
 echo "......................................................................................"
 echo "Scores for LA Computation"

@@ -1,19 +1,19 @@
-True Positive:	7523.0
-False Positive:	413.0
-False Negative:	14665.0
-True Negative:	12459905.0
-Recall:	0.33905715
-Precision:	0.94795867
-F-Measure:	0.49946886
-Specificity:	0.99996685
-RAND Index:	0.99879207
-Normalized Mutual Information:	0.4043
-Avg Density:	0.90099597
-Avg Clustering Coefficient:	0.86058193
-Avg Conductance:	0.1688372
-Avg FlakeODF:	0.13235326
-Avg FOMD:	0.27591533
-Avg TPR:	0.9089362
-Avg CR:	0.00019333
-Avg Cohesive:	0.80215969
-Avg Separability:	13.08795985
+True Positive:	16033.0
+False Positive:	691.0
+False Negative:	6155.0
+True Negative:	12459627.0
+Recall:	0.7225978
+Precision:	0.95868213
+F-Measure:	0.82406456
+Specificity:	0.99994454
+RAND Index:	0.99945155
+Normalized Mutual Information:	0.8275
+Avg Density:	0.8717867
+Avg Clustering Coefficient:	0.84706979
+Avg Conductance:	0.14717349
+Avg FlakeODF:	0.11539086
+Avg FOMD:	0.27729047
+Avg TPR:	0.91416886
+Avg CR:	0.00017442
+Avg Cohesive:	0.75533285
+Avg Separability:	14.16396916
