@@ -1,8 +1,8 @@
 
 #!/bin/bash
 
-echo "I am assuming you are in the home directory of Community Detection Folder"
-echo "Plese set this environment Variable, For eg. /home/unityid/Community_Detection/ "/" at the end is important")
+echo "I am assuming you are in the home directory of Community Detection Folder
+"Plese set this environment Variable, For eg. /home/unityid/Community_Detection/ "/" at the end is important")
 export GDMPATH=~/Community_Detection
 export PYTHONPATH=$PYTHONPATH:$GDMPATH
 

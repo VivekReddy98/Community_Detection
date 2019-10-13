@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 neo4j
 py2neo
 numpy
 pandas
 urllib3
+=======
+pandas
+neo4j
+numpy
+urllib3
+py2neo
+>>>>>>> 9fed5698ecd2986352630280e21cd2fa2f7c6505
