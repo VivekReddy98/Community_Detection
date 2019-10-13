@@ -3,8 +3,8 @@
 
 
 echo "I am assuming you are in the home directory of Community Detection Folder"
-source venv/bin/activate
-source requirements.sh > /dev/null
+#source venv/bin/activate
+#source requirements.sh > /dev/null
 
 echo "Please enter your choice of graph: (amazon, dblp, youtube)"
 read cat

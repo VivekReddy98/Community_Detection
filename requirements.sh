@@ -1,7 +1,7 @@
-pip3 install neo4j
-pip3 install py2neo
-pip3 install numpy
-pip3 install pandas
-pip3 install urllib3
-export GDMPATH=/xxxxxxxx/Community_Detection/
+sudo pip install neo4j
+sudo pip install py2neo
+sudo pip install numpy
+sudo pip install pandas
+sudo pip install urllib3
+export GDMPATH=/home/ysoodin/Community_Detection/
 export PYTHONPATH=$PYTHONPATH:$GDMPATH
