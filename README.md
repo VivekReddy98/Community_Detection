@@ -36,7 +36,8 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 ### Clone this repository
 1) Install virtual environment package:
 python3 -m pip install --user virtualenv
-2) Create a virtual environment inside your project directory using 
+2) sudo apt-get install python3-venv
+3) Create a virtual environment inside your project directory using 
 python3 -m venv venv (The second argument is he name of the folder which will be created, you might not want to change it)
 
 You are good to go after this step.
