@@ -11,9 +11,10 @@ Tools Required:
 Neo4j Installation Guide:
 Note: OS is assumed to be Linux (debian). Follow this link to install Neo4j
 1) Java 8 is required for Neo4j (VCL image already has Java 8)
-Link: https://neo4j.com/docs/operations-manual/current/installation/linux/debian/#debian-installation
+2) Installation: sudo apt-get install neo4j=1:3.5.11 (Check the updated version while you are installing
+For more information, follow this link: https://neo4j.com/docs/operations-manual/current/installation/linux/debian/#debian-installation
 
-Useful Locations:Algorithm was
+Useful Locations:
 1) /etc/neo4j/neo4j.conf -- Edit the configuration parameters on this file
 2) /var/lib/neo4j/data/databases/xxx.db/ -- Data is stored here. (graph.db is the default)
 3) /var/lib/neo4j/plugins/ -- Add Any extra plugins here. 
@@ -22,9 +23,6 @@ Add Neo4j Algorithms Jar:
 1) Resources : https://neo4j.com/docs/graph-algorithms/current/introduction/#_installation
 2) Neo4j Download Center: https://neo4j.com/download-center/#enterprise
 3) Download Neo4j Graph Algorithms jar from the Download center
-
-For the Impatient: 
-1) Installation: sudo apt-get install neo4j=1:3.5.11 (Check the updated version while you are installing
 
 Download the algo.* plugin using th command (Check your version while updating)
 1) wget https://s3-eu-west-1.amazonaws.com/com.neo4j.graphalgorithms.dist/neo4j-graph-algorithms-3.5.11.0-standalone.zip
