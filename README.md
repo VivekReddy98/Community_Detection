@@ -24,7 +24,7 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 2) Neo4j Download Center: https://neo4j.com/download-center/#enterprise
 3) Download Neo4j Graph Algorithms jar from the Download center
 
-### Download the algo.* plugin using th command (Check your version while updating)
+#### Download the algo.* plugin using th command (Check your version while updating)
 1) wget https://s3-eu-west-1.amazonaws.com/com.neo4j.graphalgorithms.dist/neo4j-graph-algorithms-3.5.11.0-standalone.zip
 2) Unzip neo4j-graph-algorithms-3.5.11.0-standalone.zip
 3) mv neo4j-graph-algorithms-3.5.11.0-standalone.jar /var/lib/neo4j/plugins/
