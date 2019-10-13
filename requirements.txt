@@ -1,5 +1,0 @@
-pandas
-neo4j
-numpy
-urllib3
-py2neo
