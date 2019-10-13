@@ -13,8 +13,8 @@ import sys
 parent_dir = os.environ['GDMPATH']
 graph = Graph("bolt:localhost:7474/databases/gdm.db", auth=("neo4j", "vivek1234"))
 
-category = ['amazon','dblp','youtube']
-variant = ['small', 'medium', 'large' ]  
+categories = ['amazon','dblp','youtube']
+variants = ['small', 'medium', 'large' ]  
 di = {'amazon':'1', 'dblp':'2', 'youtube':'3', 'small':'4', 'medium':'5', 'large':'6'}
 
 with open('json_files/query.json') as json_file:
@@ -25,18 +25,20 @@ with open('json_files/Regex_dict.json') as json_file:
 
 cat = str(sys.argv[1])
 var = str(sys.argv[2])
-print(var)
-if cat not in category:
+
+if cat not in categories:
     raise Exception('The argument 1 should be one of these [amazon, dblp or youtube]')
-if var not in variant:
+if var not in variants:
     raise Exception('The argument 2 should be one of these [small, medium or large]')
 
 filename = "datasets/{}/{}.graph.{}".format(cat, cat, var)  
-    
+
+print(filename)
+
 with open(parent_dir+filename) as fp:
     elements = fp.readline().strip().split(" ")
 
-G = GraphGenerator(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
+G = GraphGenerator(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
 print("Initializing Nodes for the graph {}_{}".format(cat,var))
 start = time.time()
 G.NodeInit(int(elements[0]))

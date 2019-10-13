@@ -26,3 +26,14 @@ echo "Please check the below given files for your results"
 echo results/results/$cat.LA.$var.console -- "Results computed after the LA computation"
 echo results/results/$cat.IS.$var.console -- "Results computed after the IS computation"
 echo "For more Detailed output look in the csv files in the results folder"
+
+echo "......................................................................................."
+echo "Scores for LA Computation"
+echo " "
+cat results/$cat.LA.$var.console
+
+echo "......................................................................................."
+echo "Scores for IS Computation"
+echo " "
+cat results/$cat.IS.$var.console
+

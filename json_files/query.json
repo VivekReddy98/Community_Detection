@@ -17,8 +17,8 @@
 		"property_PR_local": "MATCH (n:<label>) WHERE n.partition=<part> RETURN n.uid AS uid, n.<prop> AS <prop> ORDER BY <prop> DESC LIMIT <lim>;"
 	},
 	"PageRank": {
-		"query": "CALL algo.pageRank.stream('<label>', '<rltn>', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
-		"query_write": "CALL algo.pageRank('<label>', '<rltn>', {iterations:<itr>, dampingFactor:<df>, write: true, writeProperty:'pagerank'});"
+		"query": "CALL algo.pageRank.stream('<label>', 'KNOWS', {dampingFactor:<df>, iterations:<itr>}) Yield nodeId, score RETURN algo.asNode(nodeId).name AS node,score ORDER BY score DESC;",
+		"query_write": "CALL algo.pageRank('<label>', 'KNOWS', {iterations:<itr>, dampingFactor:<df>, write: true, writeProperty:'pagerank'});"
 	},
 	"match": {
 		"node": "MATCH (n:<label>) WHERE n.uid='<uid1>' RETURN n;",
@@ -37,9 +37,9 @@
 	"cluster": {
 		"ask": "MATCH (n:<label>) WHERE n.uid='<uid>' RETURN n.C_D;",
 		"set": "MATCH (n:<label>) WHERE n.uid='<uid>' SET n.C_D = '<cid>';",
-        "remove": "MATCH (n:<label>{uid:<uid>}) SET n.C_D = '<cid>';",
+		"remove": "MATCH (n:<label>{uid:<uid>}) SET n.C_D = '<cid>';",
 		"nodes": "MATCH (n:<label>) WHERE n.C_D CONTAINS '|<cid>|' RETURN DISTINCT n.uid AS uid;",
-        "one_hop_neigh": "MATCH (n:<label>)-[*0..1]->(m:<label>) WHERE EXISTS(m.pagerank) AND n.C_D CONTAINS '|<cid>|' RETURN DISTINCT m.uid AS uid, m.C_D AS C_D;"
+		"one_hop_neigh": "MATCH (n:<label>)-[*0..1]->(m:<label>) WHERE EXISTS(m.pagerank) AND n.C_D CONTAINS '|<cid>|' RETURN DISTINCT m.uid AS uid, m.C_D AS C_D;"
 	},
 	"conductance": {
 		"M_s": "MATCH (n:<label>)-[r:KNOWS]->(m:<label>) where n.C_D CONTAINS '|<cid>|' AND m.C_D CONTAINS '|<cid>|' return count(r)",

@@ -21,9 +21,9 @@ class RaRe(Parse, ID_generator):
 
     def PageRank(self, PR_itr='25000', PR_df='0.85', what='query_write'):
         self.graph.run(self.page_rank(what=what, label=self.label_gen(), relation='KNOWS', PR_itr=PR_itr, PR_df=PR_df))
-        print(self.match_unique(what='property_PR', label=self.label_gen()))
+        #print(self.match_unique(what='property_PR', label=self.label_gen()))
         df_PR = self.graph.run(self.match_unique(what='property_PR', label=self.label_gen())).to_data_frame()
-        print(df_PR.head())
+        #print(df_PR.head())
         self.PR_list = df_PR['uid'].tolist()
         return None
 
@@ -94,24 +94,24 @@ class RaRe(Parse, ID_generator):
             #print("The time taken for node {} is {} secs and Cluster is {}".format(node, (time.time()-start), prev))
         return None
 
+# if __name__ == '__main__':
+#     parent_dir = os.environ["GDMPATH"]
+#     graph = Graph("bolt:localhost:7474", auth=("neo4j", "vivek1234"))
 
-if __name__ == '__main__':
-    parent_dir = os.environ["GDMPATH"]
-    graph = Graph("bolt:localhost:7474", auth=("neo4j", "vivek1234"))
+#     category = ['dblp']  #'dblp', 'youtube']
+#     variant = ['small',] #['medium', 'large']
+#     di = {'amazon':'1', 'dblp':'2', 'youtube':'3', 'small':'4', 'medium':'5', 'large':'6'}
 
-    category = ['dblp']  #'dblp', 'youtube']
-    variant = ['small',] #['medium', 'large']
-    di = {'amazon':'1', 'dblp':'2', 'youtube':'3', 'small':'4', 'medium':'5', 'large':'6'}
+#     with open('json_files/query.json') as json_file:
+#         json_dict = json.load(json_file)
 
-    with open('json_files/query.json') as json_file:
-        json_dict = json.load(json_file)
+#     with open('json_files/Regex_dict.json') as json_file:
+#         regex_dict = json.load(json_file)
 
-    with open('json_files/Regex_dict.json') as json_file:
-        regex_dict = json.load(json_file)
+#     R = RaRe(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
+#     start = time.time()
+#     #R.Execute()
+#     R.PageRank()
+#     print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
+#     R.getConductanceDict(write=True)
 
-    R = RaRe(graph=graph, cat=category[0], var=variant[0], di=di, json_dict=json_dict, regex_dict=regex_dict)
-    start = time.time()
-    #R.Execute()
-    R.PageRank()
-    print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
-    R.getConductanceDict(write=True)
