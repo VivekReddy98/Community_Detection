@@ -8,6 +8,9 @@ This was implemeneted in reference to the algorithm presented in Paper-1 under r
 2) Python 2
 3) Neo4j (Graph DB)
 
+### Libraried:
+1) All the required libraries 
+
 ### Neo4j Installation Guide:
 Note: OS is assumed to be Linux (debian)
 Note: Java 8 is required for Neo4j (VCL image already has Java 8)
@@ -16,6 +19,13 @@ Note: Java 8 is required for Neo4j (VCL image already has Java 8)
 3) sudo apt-get update
 4) sudo apt-get install neo4j=1:3.5.11 (Check the updated version while you are installing)
 For more information, follow this link: https://neo4j.com/docs/operations-manual/current/installation/linux/debian/#debian-installation
+
+
+### Useful Commands:
+1) neo4j restart
+2) neo4j start
+3) neo4j stop
+4) cypher-shell (To-pass cypher commands directly)
 
 ### Useful Locations:
 1) /etc/neo4j/neo4j.conf -- <Edit the configuration parameters of the Neo4j Here
@@ -29,33 +39,32 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 2) Neo4j Download Center: https://neo4j.com/download-center/#enterprise
 3) Download Neo4j Graph Algorithms jar from the Download center
 
-#### Follow the below Specified Steps for adding Neo (Check your version while updating)
+#### Follow the below Specified Steps for adding Neo4j algorithm (Check your version while updating)
 1) wget https://s3-eu-west-1.amazonaws.com/com.neo4j.graphalgorithms.dist/neo4j-graph-algorithms-3.5.11.0-standalone.zip
 2) Unzip neo4j-graph-algorithms-3.5.11.0-standalone.zip
 3) mv neo4j-graph-algorithms-3.5.11.0-standalone.jar /var/lib/neo4j/plugins/
 4) Edit the configuration file by adding:
 5) "dbms.security.procedures.unrestricted=algo.*,apoc.*"
 6) Also uncomment this line:
-dbms.security.auth_enabled=false
-7) Restart the neo4j server using neo4j restart, use sudo if you face any permission issues.
+8) dbms.security.auth_enabled=false
+9) Restart the neo4j server using neo4j restart, use sudo if you face any permission issues.
 
 ### Set up the environment and required folders:
 0) Clone this repositiry preferabbly in /home/unityID/
 1) Install virtual environment package:
-apt-get install python-virtualenv
-2) Create a virtual environment inside your project directory using 
-virtualenv -p /usr/bin/python3 project_directory/venv (The second argument is he name of the folder which will be created, you might not want to change it)
-3) Copy Datasets and metric_code folder from your local machine to this repository.
-4) In your local Machine, go to the location where your have metric_code and datasets folders and run these commands.
-scp -r metrics_code unityID@ip_addr:/home/unityID/Community_Detection
-scp -r datasets unityID@ip_addr:/home/unityID/Community_Detection
-5) start your virtual environment using the command
-source venv/bin/activate
-6) Install required packages using the command
-pip install -r requirements.txt
+2) apt-get install python-virtualenv
+3) Create a virtual environment inside your project directory using 
+4) virtualenv -p /usr/bin/python3 project_directory/venv (The second argument is he name of the folder which will be created, you might not want to change it)
+5) Copy Datasets and metric_code folder from your local machine to this repository.
+6) In your local Machine, go to the location where your have metric_code and datasets folders and run these commands.
+7) scp -r metrics_code unityID@ip_addr:/home/unityID/Community_Detection
+8) scp -r datasets unityID@ip_addr:/home/unityID/Community_Detection
+9) start your virtual environment using the command
+10) source venv/bin/activate
+11) Install required packages using the command
+12) pip install -r requirements.txt
 
-
-
+###
 You are good to go after this step.
 1) Run compute_results.sh to get going. 
 2) It'll install the packages and set the environment variables required.
