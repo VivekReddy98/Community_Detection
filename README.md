@@ -21,6 +21,8 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 1) /etc/neo4j/neo4j.conf -- <Edit the configuration parameters of the Neo4j Here
 2) /var/lib/neo4j/data/databases/xxx.db/ -- Data is stored here. (graph.db is the default)
 3) /var/lib/neo4j/plugins/ -- Add Any extra plugins here. 
+4) Create this file:
+5) sudo mkdir /var/lib/neo4j/data/databases/graph.db/
 
 ### Add Neo4j Algorithms Jar:
 1) Resources : https://neo4j.com/docs/graph-algorithms/current/introduction/#_installation
@@ -33,14 +35,26 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 3) mv neo4j-graph-algorithms-3.5.11.0-standalone.jar /var/lib/neo4j/plugins/
 4) Edit the configuration file by adding:
 5) "dbms.security.procedures.unrestricted=algo.*,apoc.*"
-6) Restart the neo4j server using neo4j restart, use sudo if you face any permission issues.
+6) Also uncomment this line:
+dbms.security.auth_enabled=false
+7) Restart the neo4j server using neo4j restart, use sudo if you face any permission issues.
 
-### Clone this repository
+### Set up the environment and required folders:
+0) Clone this repositiry preferabbly in /home/unityID/
 1) Install virtual environment package:
-python3 -m pip install --user virtualenv
-2) sudo apt-get install python3-venv
-3) Create a virtual environment inside your project directory using 
-python3 -m venv venv (The second argument is he name of the folder which will be created, you might not want to change it)
+apt-get install python-virtualenv
+2) Create a virtual environment inside your project directory using 
+virtualenv -p /usr/bin/python3 project_directory/venv (The second argument is he name of the folder which will be created, you might not want to change it)
+3) Copy Datasets and metric_code folder from your local machine to this repository.
+4) In your local Machine, go to the location where your have metric_code and datasets folders and run these commands.
+scp -r metrics_code unityID@ip_addr:/home/unityID/Community_Detection
+scp -r datasets unityID@ip_addr:/home/unityID/Community_Detection
+5) start your virtual environment using the command
+source venv/bin/activate
+6) Install required packages using the command
+pip install -r requirements.txt
+
+
 
 You are good to go after this step.
 1) Run compute_results.sh to get going. 
