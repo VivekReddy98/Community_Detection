@@ -3,7 +3,7 @@
 
 
 echo "I am assuming you are in the home directory of Community Detection Folder"
-"Plese set this environment Variable by editing this file, For eg. '/home/unityid/Community_Detection/' NOTE: '/' at the end is important"
+echo "Plese set this environment Variable by editing this file, For eg. '/home/unityid/Community_Detection/' NOTE: '/' at the end is important"
 export GDMPATH=/home/vkarri/Community_Detection/
 export PYTHONPATH=$PYTHONPATH:$GDMPATH
 

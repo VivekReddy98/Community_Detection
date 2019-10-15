@@ -1,3 +1,4 @@
 It took 1086 seconds to run the code and compute the results for the graph dblp medium
 It took 1021 seconds to run the code and compute the results for the graph youtube medium
 It took 5440 seconds to run the code and compute the results for the graph amazon large
+It took 6 seconds to complete the metric for the graph amazon small

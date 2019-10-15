@@ -41,12 +41,12 @@ with open(parent_dir+filename) as fp:
 G = GraphGenerator(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
 print("Initializing Nodes for the graph {}_{}".format(cat,var))
 start = time.time()
-G.NodeInit(int(elements[0]))
+#G.NodeInit(int(elements[0]))
 print("The time taken for Node initialization is : {} minutes".format((time.time()-start)/60))
 
 print("Initializing Edges for the graph {}_{}".format(cat,var))
 start = time.time()
-G.Relation(path=filename)
+#G.Relation(path=filename)
 print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
 
 R = RaRe(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)

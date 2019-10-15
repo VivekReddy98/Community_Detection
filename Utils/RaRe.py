@@ -19,7 +19,7 @@ class RaRe(Parse, ID_generator):
         self.clusters = {}
         self.cid = count(start=1, step=1)
 
-    def PageRank(self, PR_itr='25000', PR_df='0.85', what='query_write'):
+    def PageRank(self, PR_itr='5000', PR_df='0.85', what='query_write'):
         self.graph.run(self.page_rank(what=what, label=self.label_gen(), relation='KNOWS', PR_itr=PR_itr, PR_df=PR_df))
         #print(self.match_unique(what='property_PR', label=self.label_gen()))
         df_PR = self.graph.run(self.match_unique(what='property_PR', label=self.label_gen())).to_data_frame()

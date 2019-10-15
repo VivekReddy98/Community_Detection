@@ -7,7 +7,6 @@ venv/
 #Ignore Test Metrics folder
 Metric_test/
 
-
 #Ignore .pyc files
 *.pyc
 
