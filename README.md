@@ -8,8 +8,11 @@ This was implemeneted in reference to the algorithm presented in Paper-1 under r
 2) Python 2
 3) Neo4j (Graph DB)
 
-### Libraried:
-1) All the required libraries 
+### Libraries required:
+1) All the required libraries are present in requirements.txt file
+2) neo4j -- Python Driver to access neo4j Database
+3) py2neo -- py2neo is a client library to access and operate neo4j with python
+Note: Use py2neo v4 (https://py2neo.org/v4/) 
 
 ### Neo4j Installation Guide:
 Note: OS is assumed to be Linux (debian)
@@ -50,7 +53,7 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 9) Restart the neo4j server using neo4j restart, use sudo if you face any permission issues.
 
 ### Set up the environment and required folders:
-0) Clone this repositiry preferabbly in /home/unityID/
+0) Clone this repositiry preferabbly in /home/unityID/Community_Dection
 1) Install virtual environment package:
 2) apt-get install python-virtualenv
 3) Create a virtual environment inside your project directory using 
@@ -62,9 +65,24 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 9) start your virtual environment using the command
 10) source venv/bin/activate
 11) Install required packages using the command
-12) pip install -r requirements.txt
+12) pip install -r requirements.txt (These packages will be installed in the venv i.e. locally)
 
-###
-You are good to go after this step.
-1) Run compute_results.sh to get going. 
-2) It'll install the packages and set the environment variables required.
+### Setting Environment variables.
+1) Set the environment variable by editing the below given line in the script compute_results.sh
+Point this path to the folder where your community detction folder is present.
+2) export GDMPATH=/home/unityID/Community_Detection
+
+### Brief overview to get the code running.
+1) The Source Code is present in Utils folder and packaged as a library.
+2) initialize.py will consolidate and compute the clusters for any given graph.
+3) compute_results.sh will take these results and apply metric calculation script on them.
+4) The predictions are stored in predictions folder
+5) Since there are two parts in the algorithm LA and IS. Results after every step have been recorded for comparison purposes.
+6) To view the summary of the results go to the "*.*.*.console" files.
+
+### Instrcutions to get it running.
+1) Read through the script compute_results.sh
+2) Run it using the command source compute_results.sh
+3) Enter your inputs where prompted.
+4) After its completion, find the results in result folder.
+5) Time taken by the algorithm is present in time_taken.txt
