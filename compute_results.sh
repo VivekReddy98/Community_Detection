@@ -15,8 +15,8 @@ read var
 
 
 echo "DB takes some time to restart, so Hwz your life?"
-sudo rm -rf /var/lib/neo4j/data/databases/gdm.db
-sudo mkdir /var/lib/neo4j/data/databases/gdm.db
+sudo rm -rf /var/lib/neo4j/data/databases/graph.db
+sudo mkdir /var/lib/neo4j/data/databases/graph.db
 cd $GDMPATH
 sudo neo4j stop
 sudo neo4j start
