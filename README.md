@@ -47,7 +47,7 @@ For more information, follow this link: https://neo4j.com/docs/operations-manual
 2) Unzip neo4j-graph-algorithms-3.5.11.0-standalone.zip
 3) mv neo4j-graph-algorithms-3.5.11.0-standalone.jar /var/lib/neo4j/plugins/
 4) Edit the configuration file by adding:
-5) "dbms.security.procedures.unrestricted=algo.*,apoc.*"
+5) "dbms.security.procedures.unrestricted=algo.* , apoc.*"
 6) Also uncomment this line:
 8) dbms.security.auth_enabled=false
 9) Restart the neo4j server using neo4j restart, use sudo if you face any permission issues.
