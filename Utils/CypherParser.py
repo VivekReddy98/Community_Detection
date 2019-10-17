@@ -1,5 +1,16 @@
+'''
+A file names query.json can be found out in the folder json_files, 
+which had Cypher Queries (Cypher is for Neo4j as MySQl is for a RDBMS) with placeholders (all the fields with <> tags)
+to facilitate the use of Neo4j in a dynamic fasion from Python using Py2Neo (Python Driver)
+'''
 import re
-
+'''
+Class Parse: A Common Util Class written to facilitate above specified operation using query.json and Regex_dict.json
+Class ID_generator: Neo4j Graph Node has Labels and Properties. 
+                    (This class is used to uniquely define the Node ID, Node Name, Label (usually "cat_var"))
+                    (Also cluster are stored by the format |cid 1|cid 2|cid 3|cid 4|....etc|)
+Most of the other Classes defined elsewhere in this project extend these class
+'''
 class Parse(object):
     def __init__(self, json_map,  Regex_dict):
         self.regex = Regex_dict

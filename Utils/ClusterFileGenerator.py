@@ -1,6 +1,9 @@
 from py2neo import Graph, NodeMatcher
 from Utils.CypherParser import ID_generator
-
+'''
+Given a graph with some generated cluster ID's in the format specified in CypherParser.py, 
+this class is used to generate a a text file of communities identified in the preditions folder.
+'''
 class ClusterFileGenerator(ID_generator):
     
     def __init__(self, graph, out_dir="predictions/"):

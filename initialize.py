@@ -1,3 +1,7 @@
+'''
+This is the starting script which taken input argument python initialize arg[1] arg[2], 
+where arg[1] is the category name i.e. [amazon, youtube etc] and arg[2] [small, medium etc] is the vaiant name.
+'''
 import sys,os,json,time
 import pandas as pd
 from py2neo import Graph, Node, Relationship, Database
@@ -38,6 +42,7 @@ print(filename)
 with open(parent_dir+filename) as fp:
     elements = fp.readline().strip().split(" ")
 
+# This Class will initialize nodes and edges in the Neo4j database 
 G = GraphGenerator(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
 print("Initializing Nodes for the graph {}_{}".format(cat,var))
 start = time.time()
@@ -50,6 +55,7 @@ G.Relation(path=filename)
 
 print("The time taken for Edge initialization is : {} minutes".format((time.time()-start)/60))
 
+# This Class will Compute RaRe or Link Aggregation on the generated nodes and edges 
 R = RaRe(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)
 print("Computing RaRe(or LA) for the graph {}_{}...........".format(cat,var))
 start = time.time()
@@ -59,9 +65,11 @@ print("The time taken for RaRe is {} mins".format((time.time()-start)/60))
 num_clusters = len(R.getConductanceDict(write=False))
 print("The total number of clusters found out by RaRe for the graph {}_{} is {}".format(cat,var,num_clusters))       
 
+# This Class will write the output of clusters generated after the RaRe step onto a text file 
 F = ClusterFileGenerator(graph=graph) 
 F.genFile(cat, var, num_clusters, is_LA_output=True)     
 
+# This Class will Compute Iterative Scan over the clusters computed by RaRe 
 print("Computing IS(or Iterative Scan) for the graph {}_{}".format(cat,var))
 start = time.time()
 I = IS(graph=graph, cat=cat, var=var, di=di, json_dict=json_dict, regex_dict=regex_dict)

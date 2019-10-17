@@ -4,6 +4,13 @@ from py2neo.matching import NodeMatcher
 from py2neo.database import Schema
 from Utils.CypherParser import Parse, ID_generator
 
+'''
+Used to generate Nodes and Edges in Neo4j DB.
+Most of the method names are obvious except __giveout(), 
+which will give out a subset of adjacency list as controlled by itr_limit,
+if itr_limit = number of edges, then this will give out the complete adjacency list which is controlled by overrite flag.
+'''
+
 class GraphGenerator(Parse, ID_generator):
     def __init__(self, graph, cat, var, di, json_dict, regex_dict):
         self.cat = cat

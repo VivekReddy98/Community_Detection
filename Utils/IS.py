@@ -6,6 +6,17 @@ from Utils.CypherParser import Parse, ID_generator
 from Utils.RaRe import RaRe
 from itertools import count
 
+'''
+IS iterates over the communities identified by RaRe (LA), but recursively modified each cluster boundary until conductance converges.
+Method SeedConductance: This will calculate the conductance scores and stores them in a dictionary
+Method modify_CD: To modify the Cluster (Community) ID generated
+Method is_inside: To check whether a node is in a particular cluster
+Method RemoveStupid: This will remove single node clusters (also called as outliers)
+Method ConductanceCheck: This will check if the conductance increases or decreases by adding or removing a node.
+Method OneCluster: Recursive method designed to optimize any given cluster.
+Method Execute: This will consolidate and compute OneCluster on all the clusters and thus completes IS.
+'''
+
 class IS(Parse, ID_generator):
     def __init__(self, graph, cat, var, di, json_dict, regex_dict):
         self.graph = graph

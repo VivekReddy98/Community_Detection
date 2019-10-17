@@ -4,7 +4,16 @@ from py2neo import Graph, Node, Relationship, Database
 from py2neo.database import Schema
 from Utils.CypherParser import Parse, ID_generator
 from itertools import count
-
+'''
+Note: "Cluster" is used in the place of "Community" in the repo, so don't confuse.
+If you have gone through the algorithm given in the Paper-1 and the Report, then the method names would make sense.
+self.Execute() will consolidate all the functionality.
+One aspect where RaRe diveges a bit from the paper is defined in the methods ConnectedComponents and PossibleClusters
+Method ConnectedComponents: This will find out connected components in the Graph using label propagation algorithm.
+Method PossibleClusters: Given a node and its partition ID, this will return a possible list of Communities to be looped through
+                         i.e the communities found out till that iteration in the connected component of the graph to which the node 
+                         belong.
+'''
 class RaRe(Parse, ID_generator):
     def __init__(self, graph, cat, var, di, json_dict, regex_dict):
         self.graph = graph
